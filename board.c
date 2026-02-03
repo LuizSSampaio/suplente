@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 
 #include "board.h"
@@ -37,4 +38,47 @@ void markAddPos(Board *self, int row, int col) {
 
 void markRemPos(Board *self, int row, int col) {
   self->mask[(row - 1) + ((col - 1) * self->size)] = -1;
+}
+
+void printRowSeparator(char *separator, int repeat) {
+  for (int i = 0; i <= repeat; i++) {
+    printf("%s", separator);
+  }
+  printf("\n");
+}
+
+void printBoard(Board *self) {
+  printRowSeparator("|---|", self->size + 1);
+  // Column index
+  printf("|   |");
+  for (int i = 0; i < self->size; i++) {
+    printf("| %d |", i + 1);
+  }
+  printf("|   |\n");
+
+  printRowSeparator("|---|", self->size + 1);
+
+  for (int i = 0; i < self->size; i++) {
+    // Row Index
+    printf("| %d |", i + 1);
+
+    // Row Fields
+    for (int j = 0; j < self->size; j++) {
+      printf("| %d |", self->fields[(i) + ((j)*self->size)]);
+    }
+
+    // Row Tip
+    printf("| %d |\n", self->tips[i + self->size + 1]);
+
+    printRowSeparator("|---|", self->size + 1);
+  }
+
+  // Column Tip
+  printf("|   |");
+  for (int i = 0; i < self->size; i++) {
+    printf("| %d |", self->tips[i]);
+  }
+  printf("|   |\n");
+
+  printRowSeparator("|---|", self->size + 1);
 }

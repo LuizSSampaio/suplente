@@ -18,3 +18,5 @@ void setColumnTip(Board *self, int col, int value);
 void markAddPos(Board *self, int row, int col);
 
 void markRemPos(Board *self, int row, int col);
+
+void printBoard(Board *self);

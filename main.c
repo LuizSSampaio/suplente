@@ -1,11 +1,18 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "board.h"
+
 void repl();
 
 int main() {
   printf("Bem vindo ao Jogo SUMPLETE\n");
-  repl();
+
+  Board board = newBoard(3);
+  printBoard(&board);
+  destroyBoard(&board);
+
+  // repl();
 
   return 0;
 }

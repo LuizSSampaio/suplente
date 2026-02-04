@@ -2,17 +2,17 @@
 
 #include "board.h"
 
-enum Dificult { Easy, Medium, Hard };
+enum Dificult { Easy = 3, Medium = 5, Hard = 7 };
 
 typedef struct {
-  Board *board;
-  Dificult dificult;
+  Board board;
+  enum Dificult dificult;
 
   char *player;
   int turns;
 } Game;
 
-Game newGame(Dificult dificult, char *player);
+Game newGame(enum Dificult dificult, char *player);
 
 void destroyGame(Game *self);
 

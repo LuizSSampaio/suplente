@@ -5,7 +5,7 @@
 #include "board.h"
 #include "game.h"
 
-Game newGame(enum Dificult dificult, const char *player) {
+Game newGame(enum Difficult dificult, const char *player) {
   Game self;
 
   self.dificult = dificult;
@@ -99,4 +99,100 @@ void saveGame(Game *self, const char name[21]) {
           ((int)time(NULL) - self->startTime) / 1000);
 
   fclose(save);
+}
+
+// TODO: Remove error handling boilerplate
+Game loadGame(const char name[21]) {
+  char path[32] = "";
+  strcat(path, "saves/");
+  strcat(path, name);
+  strcat(path, ".sum");
+
+  FILE *save = fopen(path, "r");
+  if (save == NULL) {
+    printf("Falha ao carregar o arquivo %s.\nCriando um novo jogo...", path);
+    return newGame(Easy, "None");
+  }
+
+  Game self;
+
+  // Difficult
+  int size;
+  if (fscanf(save, "%d", &size) == -1) {
+    fclose(save);
+    printf("Falha ao carregar o arquivo %s.\nCriando um novo jogo...", path);
+    return newGame(Easy, "None");
+  }
+  self.dificult = size;
+  self.board = newBoard(self.dificult);
+
+  // Fields
+  for (int i = 0; i < self.board.size; i++) {
+    for (int j = 0; j < self.board.size; j++) {
+      int value;
+      if (fscanf(save, "%d", &value) == -1) {
+        fclose(save);
+        printf("Falha ao carregar o arquivo %s.\nCriando um novo jogo...",
+               path);
+        return newGame(Easy, "None");
+      }
+      setField(&self.board, i + 1, j + 1, value);
+    }
+  }
+
+  // Response
+  int respCount;
+  if (fscanf(save, "%d", &respCount) == -1) {
+    fclose(save);
+    printf("Falha ao carregar o arquivo %s.\nCriando um novo jogo...", path);
+    return newGame(Easy, "None");
+  }
+  for (int i = 0; i < respCount; i++) {
+    int row, col;
+    if (fscanf(save, "%d%d", &row, &col) == -1) {
+      fclose(save);
+      printf("Falha ao carregar o arquivo %s.\nCriando um novo jogo...", path);
+      return newGame(Easy, "None");
+    }
+    setResp(&self.board, row, col, 1);
+  }
+
+  // Mask
+  int maskCount;
+  if (fscanf(save, "%d", &maskCount) == -1) {
+    fclose(save);
+    printf("Falha ao carregar o arquivo %s.\nCriando um novo jogo...", path);
+    return newGame(Easy, "None");
+  }
+  for (int i = 0; i < maskCount; i++) {
+    char operation;
+    int row, col;
+    if (fscanf(save, " %c%d%d", &operation, &row, &col) == -1) {
+      fclose(save);
+      printf("Falha ao carregar o arquivo %s.\nCriando um novo jogo...", path);
+      return newGame(Easy, "None");
+    }
+    if (operation == 'a') {
+      markAddPos(&self.board, row, col);
+      continue;
+    }
+    markRemPos(&self.board, row, col);
+  }
+
+  // Player
+  if (fscanf(save, " %s", self.player) == -1) {
+    fclose(save);
+    printf("Falha ao carregar o arquivo %s.\nCriando um novo jogo...", path);
+    return newGame(Easy, "None");
+  }
+  int duration;
+  if (fscanf(save, "%d", &duration) == -1) {
+    fclose(save);
+    printf("Falha ao carregar o arquivo %s.\nCriando um novo jogo...", path);
+    return newGame(Easy, "None");
+  }
+  self.startTime = time(NULL) - duration * 1000;
+
+  fclose(save);
+  return self;
 }

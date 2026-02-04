@@ -9,7 +9,7 @@ typedef struct {
   enum Dificult dificult;
 
   char *player;
-  int turns;
+  int startTime;
 } Game;
 
 Game newGame(enum Dificult dificult, char *player);

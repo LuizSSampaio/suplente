@@ -1,5 +1,7 @@
-#include "game.h"
+#include <time.h>
+
 #include "board.h"
+#include "game.h"
 
 Game newGame(enum Dificult dificult, char *player) {
   Game self;
@@ -7,7 +9,7 @@ Game newGame(enum Dificult dificult, char *player) {
   self.dificult = dificult;
   self.board = newBoard(self.dificult);
   self.player = player;
-  self.turns = 0;
+  self.startTime = time(NULL);
 
   return self;
 }

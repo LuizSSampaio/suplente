@@ -38,8 +38,16 @@ void setField(Board *self, int row, int col, int value) {
   self->fields[(row - 1) + ((col - 1) * self->size)] = value;
 }
 
+int getField(Board *self, int row, int col) {
+  return self->fields[(row - 1) + ((col - 1) * self->size)];
+}
+
 void setResp(Board *self, int row, int col, int active) {
   self->fields[(row - 1) + ((col - 1) * self->size)] = (active != 0) ? 1 : 0;
+}
+
+int getResp(Board *self, int row, int col) {
+  return self->fields[(row - 1) + ((col - 1) * self->size)];
 }
 
 void generateTips(Board *self) {
@@ -60,6 +68,10 @@ void markAddPos(Board *self, int row, int col) {
 
 void markRemPos(Board *self, int row, int col) {
   self->mask[(row - 1) + ((col - 1) * self->size)] = -1;
+}
+
+int getMask(Board *self, int row, int col) {
+  return self->mask[(row - 1) + ((col - 1) * self->size)];
 }
 
 void printRowSeparator(char *separator, int repeat) {

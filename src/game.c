@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <time.h>
 
@@ -14,10 +15,23 @@ Game newGame(enum Difficult dificult, const char *player) {
 
   strcat(self.player, player);
 
+  generateBoard(&self);
+
   return self;
 }
 
 void destroyGame(Game *self) { destroyBoard(&self->board); }
+
+void generateBoard(Game *self) {
+  srand(time(NULL));
+  const int boardSize = self->board.size * self->board.size;
+  for (int i = 0; i < boardSize; i++) {
+    self->board.fields[i] = (rand() % 9) + 1;
+    self->board.resp[i] = (rand() % 2) == 1;
+  }
+
+  generateTips(&self->board);
+}
 
 int fileExists(const char *path) {
   FILE *f = fopen(path, "r");

@@ -2,15 +2,15 @@
 #include <string.h>
 
 #include "board.h"
+#include "game.h"
 
 void repl();
 
 int main() {
   printf("Bem vindo ao Jogo SUMPLETE\n");
 
-  Board board = newBoard(3);
-  printBoard(&board);
-  destroyBoard(&board);
+  Game game = newGame(Easy, "Luiz");
+  printBoard(&game.board);
 
   // repl();
 

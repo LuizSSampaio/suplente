@@ -43,21 +43,22 @@ int getField(Board *self, int row, int col) {
 }
 
 void setResp(Board *self, int row, int col, int active) {
-  self->fields[(row - 1) + ((col - 1) * self->size)] = (active != 0) ? 1 : 0;
+  self->resp[(row - 1) + ((col - 1) * self->size)] = (active != 0) ? 1 : 0;
 }
 
 int getResp(Board *self, int row, int col) {
-  return self->fields[(row - 1) + ((col - 1) * self->size)];
+  return self->resp[(row - 1) + ((col - 1) * self->size)];
 }
 
 void generateTips(Board *self) {
   for (int row = 0; row < self->size; row++) {
     for (int col = 0; col < self->size; col++) {
-      const int pos = row + (col * self->size);
-      if (self->resp[pos]) {
-        self->tips[row + self->size] += self->fields[pos];
-        self->tips[col] += self->fields[pos];
-      }
+      if (!getResp(self, row + 1, col + 1))
+        continue;
+
+      const int value = getField(self, row + 1, col + 1);
+      self->tips[row + self->size] += value;
+      self->tips[col] += value;
     }
   }
 }
@@ -102,7 +103,7 @@ void printBoard(Board *self) {
     }
 
     // Row Tip
-    printf("| %d |\n", self->tips[i + self->size + 1]);
+    printf("| %d |\n", self->tips[i + self->size]);
 
     printRowSeparator("|---|", self->size + 1);
   }

@@ -8,14 +8,14 @@ typedef struct {
   Board board;
   enum Dificult dificult;
 
-  char *player;
+  char player[27];
   int startTime;
 } Game;
 
-Game newGame(enum Dificult dificult, char *player);
+Game newGame(enum Dificult dificult, const char *player);
 
 void destroyGame(Game *self);
 
-void saveGame(Game *self);
+void saveGame(Game *self, const char name[21]);
 
 Game loadGame();

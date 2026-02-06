@@ -15,6 +15,7 @@ void repl();
 void helpCommand();
 Game newGameCommand();
 Game loadGameCommand();
+void saveGameCommand(Game *save);
 
 int main() {
   printf("Bem vindo ao Jogo SUMPLETE\n\n");
@@ -80,7 +81,11 @@ void repl() {
     }
 
     if (strcmp(command, "salvar\n") == 0) {
-      // TODO:
+      if (hasGame != 1) {
+        printf("Não existe um jogo ativo para salvar\n");
+        continue;
+      }
+      saveGameCommand(&save);
       continue;
     }
   }
@@ -143,4 +148,12 @@ Game loadGameCommand() {
   scanf("%s", file);
   clearBuffer;
   return loadGame(file);
+}
+
+void saveGameCommand(Game *save) {
+  char file[21];
+  printf("Digite o nome do jogo salvo: ");
+  scanf("%s", file);
+  clearBuffer;
+  saveGame(save, file);
 }

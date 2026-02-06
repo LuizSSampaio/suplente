@@ -4,6 +4,13 @@
 #include "board.h"
 #include "game.h"
 
+#define clearBuffer                                                            \
+  do {                                                                         \
+    int c;                                                                     \
+    while ((c = getchar()) != '\n' && c != EOF) {                              \
+    }                                                                          \
+  } while (0)
+
 void repl();
 void helpCommand();
 
@@ -32,8 +39,45 @@ void helpCommand() {
   printf("\e[1mremover <lin> <col>:\e[m remove a posição da soma\n");
 }
 
+Game newGameCommand() {
+  char name[27] = "Guest";
+  printf("Digite o nome do jogador: ");
+  if (scanf("%s", name) == -1)
+    printf("Falha ao inserir o nome, usando nome padrão\n");
+  clearBuffer;
+
+  Difficult difficult = Easy;
+  while (1) {
+    char choice;
+    printf("Digite a dificuldade(F/M/D): ");
+    if (scanf("%c", &choice) == -1)
+      continue;
+
+    clearBuffer;
+
+    if (choice == 'F') {
+      difficult = Easy;
+      break;
+    }
+
+    if (choice == 'M') {
+      difficult = Medium;
+      break;
+    }
+
+    if (choice == 'D') {
+      difficult = Hard;
+      break;
+    }
+  }
+
+  return newGame(difficult, name);
+}
+
 void repl() {
   char command[17];
+  int hasGame = 0;
+  Game save;
   while (1) {
     printf("> ");
     if (fgets(command, 16, stdin) == NULL || strcmp(command, "sair\n") == 0)
@@ -41,6 +85,13 @@ void repl() {
 
     if (strcmp(command, "ajuda\n") == 0) {
       helpCommand();
+      continue;
+    }
+
+    if (strcmp(command, "novo\n") == 0) {
+      save = newGameCommand();
+      hasGame = 1;
+      printBoard(&save.board);
       continue;
     }
   }

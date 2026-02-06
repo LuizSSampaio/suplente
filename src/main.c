@@ -15,6 +15,7 @@ void repl();
 void helpCommand();
 Game newGameCommand();
 Game loadGameCommand();
+void solveGameCommand(Game *game);
 void saveGameCommand(Game *save);
 
 int main() {
@@ -32,55 +33,62 @@ void repl() {
   Game save;
   while (1) {
     printf("> ");
-    if (scanf("%s", command) == -1 || strcmp(command, "sair\n") == 0)
+    if (scanf("%s", command) == -1 || strcmp(command, "sair") == 0)
       break;
     clearBuffer;
 
-    if (strcmp(command, "ajuda\n") == 0) {
+    if (strcmp(command, "ajuda") == 0) {
       helpCommand();
       continue;
     }
 
-    if (strcmp(command, "novo\n") == 0) {
+    if (strcmp(command, "novo") == 0) {
       save = newGameCommand();
       hasGame = 1;
       printBoard(&save.board);
       continue;
     }
 
-    if (strcmp(command, "carregar\n") == 0) {
+    if (strcmp(command, "carregar") == 0) {
       save = loadGameCommand();
       hasGame = 1;
       printBoard(&save.board);
       continue;
     }
 
-    if (strcmp(command, "ranking\n") == 0) {
+    if (strcmp(command, "ranking") == 0) {
       // TODO:
       continue;
     }
 
-    if (strcmp(command, "adicionar\n") == 0) {
+    if (strcmp(command, "adicionar") == 0) {
       // TODO:
       continue;
     }
 
-    if (strcmp(command, "remover\n") == 0) {
+    if (strcmp(command, "remover") == 0) {
       // TODO:
       continue;
     }
 
-    if (strcmp(command, "dica\n") == 0) {
+    if (strcmp(command, "dica") == 0) {
       // TODO:
       continue;
     }
 
-    if (strcmp(command, "resolver\n") == 0) {
-      // TODO:
+    if (strcmp(command, "resolver") == 0) {
+      if (hasGame != 1) {
+        printf("Não existe um jogo ativo para resolver\n");
+        continue;
+      }
+
+      solveGameCommand(&save);
+      printBoard(&save.board);
+      hasGame = 0;
       continue;
     }
 
-    if (strcmp(command, "salvar\n") == 0) {
+    if (strcmp(command, "salvar") == 0) {
       if (hasGame != 1) {
         printf("Não existe um jogo ativo para salvar\n");
         continue;
@@ -148,6 +156,13 @@ Game loadGameCommand() {
   scanf("%s", file);
   clearBuffer;
   return loadGame(file);
+}
+
+void solveGameCommand(Game *game) {
+  const int boardArea = game->board.size * game->board.size;
+  for (int i = 0; i < boardArea; i++) {
+    game->board.mask[i] = game->board.resp[i];
+  }
 }
 
 void saveGameCommand(Game *save) {

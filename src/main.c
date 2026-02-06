@@ -13,6 +13,7 @@
 
 void repl();
 void helpCommand();
+Game newGameCommand();
 
 int main() {
   printf("Bem vindo ao Jogo SUMPLETE\n\n");
@@ -21,6 +22,29 @@ int main() {
   repl();
 
   return 0;
+}
+
+void repl() {
+  char command[17];
+  int hasGame = 0;
+  Game save;
+  while (1) {
+    printf("> ");
+    if (fgets(command, 16, stdin) == NULL || strcmp(command, "sair\n") == 0)
+      break;
+
+    if (strcmp(command, "ajuda\n") == 0) {
+      helpCommand();
+      continue;
+    }
+
+    if (strcmp(command, "novo\n") == 0) {
+      save = newGameCommand();
+      hasGame = 1;
+      printBoard(&save.board);
+      continue;
+    }
+  }
 }
 
 void helpCommand() {
@@ -72,27 +96,4 @@ Game newGameCommand() {
   }
 
   return newGame(difficult, name);
-}
-
-void repl() {
-  char command[17];
-  int hasGame = 0;
-  Game save;
-  while (1) {
-    printf("> ");
-    if (fgets(command, 16, stdin) == NULL || strcmp(command, "sair\n") == 0)
-      break;
-
-    if (strcmp(command, "ajuda\n") == 0) {
-      helpCommand();
-      continue;
-    }
-
-    if (strcmp(command, "novo\n") == 0) {
-      save = newGameCommand();
-      hasGame = 1;
-      printBoard(&save.board);
-      continue;
-    }
-  }
 }

@@ -99,7 +99,17 @@ void printBoard(Board *self) {
 
     // Row Fields
     for (int j = 0; j < self->size; j++) {
-      printf("| %d |", self->fields[(i) + ((j)*self->size)]);
+      const int field = getField(self, i + 1, j + 1);
+      switch (getMask(self, i + 1, j + 1)) {
+      case 1:
+        printf("| \033[32m%d\033[m |", field);
+        break;
+      case -1:
+        printf("| \033[31m%d\033[m |", field);
+        break;
+      default:
+        printf("| %d |", field);
+      }
     }
 
     // Row Tip

@@ -111,8 +111,7 @@ void saveGame(Game *self, const char name[21]) {
   }
 
   // Player
-  fprintf(save, "%s\n%ld\n", self->player,
-          (time(NULL) - self->startTime) / 1000);
+  fprintf(save, "%s\n%ld\n", self->player, time(NULL) - self->startTime);
 
   fclose(save);
 }
@@ -202,7 +201,7 @@ Game loadGame(const char name[21]) {
     fclose(save);
     return loadErrorHandler(path);
   }
-  self.startTime = time(NULL) - duration * 1000;
+  self.startTime = time(NULL) - duration;
 
   fclose(save);
 

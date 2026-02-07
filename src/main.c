@@ -5,6 +5,7 @@
 
 #include "board.h"
 #include "game.h"
+#include "rank.h"
 
 #define clearBuffer                                                            \
   do {                                                                         \
@@ -64,10 +65,11 @@ void repl() {
       markRemPos(&save.board, row, col);
       printBoard(&save.board);
       if (checkVictory(&save)) {
-        printf("Parabens! %s você gastou %ld segundos para completar o jogo.\n",
-               save.player, time(NULL) - save.startTime);
+        const int duration = time(NULL) - save.startTime;
+        printf("Parabens! %s você gastou %d segundos para completar o jogo.\n",
+               save.player, duration);
+        tryInsertPlayerRank(save.player, duration);
         hasGame = 0;
-        // TODO: Ranking
       }
       continue;
     }
@@ -89,7 +91,7 @@ void repl() {
     }
 
     if (strcmp(command, "ranking") == 0) {
-      // TODO:
+      printRank();
       continue;
     }
 

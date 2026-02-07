@@ -15,6 +15,7 @@
   } while (0)
 
 void repl();
+void playerVictory(Game *game);
 void helpCommand();
 Game newGameCommand();
 Game loadGameCommand();
@@ -51,10 +52,7 @@ void repl() {
       markAddPos(&save.board, row, col);
       printBoard(&save.board);
       if (checkVictory(&save)) {
-        const int duration = time(NULL) - save.startTime;
-        printf("Parabens! %s você gastou %d segundos para completar o jogo.\n",
-               save.player, duration);
-        tryInsertPlayerRank(save.player, duration);
+        playerVictory(&save);
         hasGame = 0;
       }
       continue;
@@ -71,10 +69,7 @@ void repl() {
       markRemPos(&save.board, row, col);
       printBoard(&save.board);
       if (checkVictory(&save)) {
-        const int duration = time(NULL) - save.startTime;
-        printf("Parabens! %s você gastou %d segundos para completar o jogo.\n",
-               save.player, duration);
-        tryInsertPlayerRank(save.player, duration);
+        playerVictory(&save);
         hasGame = 0;
       }
       continue;
@@ -138,6 +133,13 @@ void repl() {
 
     helpCommand();
   }
+}
+
+void playerVictory(Game *game) {
+  const int duration = time(NULL) - game->startTime;
+  printf("Parabens! %s você gastou %d segundos para completar o jogo.\n",
+         game->player, duration);
+  tryInsertPlayerRank(game->player, duration);
 }
 
 void helpCommand() {

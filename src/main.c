@@ -59,11 +59,6 @@ void repl() {
 
     clearBuffer;
 
-    if (strcmp(command, "ajuda") == 0) {
-      helpCommand();
-      continue;
-    }
-
     if (strcmp(command, "novo") == 0) {
       save = newGameCommand();
       hasGame = 1;
@@ -112,6 +107,12 @@ void repl() {
       saveGameCommand(&save);
       continue;
     }
+
+    if (strcmp(command, "ajuda") != 0) {
+      printf("Comando \e[1m%s\e[m não existe:\n", command);
+    }
+
+    helpCommand();
   }
 }
 

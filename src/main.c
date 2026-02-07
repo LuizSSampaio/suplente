@@ -63,7 +63,7 @@ void repl() {
       markRemPos(&save.board, row, col);
       printBoard(&save.board);
       if (checkVictory(&save)) {
-        printf("Parabens! %s você gastou %ld segundos para completar o jogo.",
+        printf("Parabens! %s você gastou %ld segundos para completar o jogo.\n",
                save.player, time(NULL) - save.startTime);
         hasGame = 0;
         // TODO: Ranking

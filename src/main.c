@@ -237,7 +237,7 @@ void tipCommand(Game *game) {
 void solveGameCommand(Game *game) {
   const int boardArea = game->board.size * game->board.size;
   for (int i = 0; i < boardArea; i++) {
-    game->board.mask[i] = game->board.resp[i];
+    game->board.mask[i] = (game->board.resp[i] == 1) ? 1 : -1;
   }
 }
 

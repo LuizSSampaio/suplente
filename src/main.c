@@ -38,6 +38,25 @@ void repl() {
     printf("> ");
     if (scanf("%s", command) == -1 || strcmp(command, "sair") == 0)
       break;
+
+    if (strcmp(command, "adicionar") == 0) {
+      if (hasGame != 1) {
+        printf("Não existe um jogo ativo. Use o comando ajuda\n");
+        continue;
+      }
+
+      int row, col;
+      scanf("%d%d", &row, &col);
+      markAddPos(&save.board, row, col);
+      printBoard(&save.board);
+      continue;
+    }
+
+    if (strcmp(command, "remover") == 0) {
+      // TODO:
+      continue;
+    }
+
     clearBuffer;
 
     if (strcmp(command, "ajuda") == 0) {
@@ -60,16 +79,6 @@ void repl() {
     }
 
     if (strcmp(command, "ranking") == 0) {
-      // TODO:
-      continue;
-    }
-
-    if (strcmp(command, "adicionar") == 0) {
-      // TODO:
-      continue;
-    }
-
-    if (strcmp(command, "remover") == 0) {
       // TODO:
       continue;
     }

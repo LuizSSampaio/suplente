@@ -42,6 +42,7 @@ int fileExists(const char *path) {
   return 0;
 }
 
+// BUG: Name writing with trash
 void saveGame(Game *self, const char name[21]) {
   char path[26] = "";
   strcat(path, name);
@@ -57,6 +58,8 @@ void saveGame(Game *self, const char name[21]) {
         return;
     }
   }
+
+  const int boardArea = self->board.size * self->board.size;
 
   FILE *save = fopen(path, "w");
   if (save == NULL) {
@@ -77,21 +80,21 @@ void saveGame(Game *self, const char name[21]) {
 
   // Response
   int respCount = 0;
-  for (int i = 0; i < self->board.size; i++) {
-    if (self->board.resp[i])
+  for (int i = 0; i < boardArea; i++) {
+    if (self->board.resp[i] == 1)
       respCount++;
   }
   fprintf(save, "%d\n", respCount);
   for (int i = 0; i < self->board.size; i++) {
     for (int j = 0; j < self->board.size; j++) {
-      if (getResp(&self->board, i + 1, j + 1))
+      if (getResp(&self->board, i + 1, j + 1) == 1)
         fprintf(save, "%d %d\n", i + 1, j + 1);
     }
   }
 
   // Mask
   int maskCount = 0;
-  for (int i = 0; i < self->board.size; i++) {
+  for (int i = 0; i < boardArea; i++) {
     if (self->board.mask[i] != 0)
       maskCount++;
   }
@@ -108,8 +111,8 @@ void saveGame(Game *self, const char name[21]) {
   }
 
   // Player
-  fprintf(save, "%s\n%d\n", self->player,
-          ((int)time(NULL) - self->startTime) / 1000);
+  fprintf(save, "%s\n%ld\n", self->player,
+          (time(NULL) - self->startTime) / 1000);
 
   fclose(save);
 }
@@ -206,6 +209,8 @@ Game loadGame(const char name[21]) {
   self.startTime = time(NULL) - duration * 1000;
 
   fclose(save);
+
+  generateTips(&self.board);
   return self;
 }
 

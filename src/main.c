@@ -39,6 +39,7 @@ void repl() {
     if (scanf("%s", command) == -1 || strcmp(command, "sair") == 0)
       break;
 
+    // TODO: Victory Check
     if (strcmp(command, "adicionar") == 0) {
       if (hasGame != 1) {
         printf("Não existe um jogo ativo. Use o comando ajuda\n");

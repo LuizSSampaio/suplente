@@ -16,6 +16,7 @@
 
 void repl();
 void playerVictory(Game *game);
+int validatePosition(Game *game, int row, int col);
 void helpCommand();
 Game newGameCommand();
 Game loadGameCommand();
@@ -49,10 +50,15 @@ void repl() {
 
       int row, col;
       scanf("%d%d", &row, &col);
+      if (!validatePosition(&save, row, col)) {
+        printf("A posição %d %d é inválida\n", row, col);
+        continue;
+      }
       markAddPos(&save.board, row, col);
       printBoard(&save.board);
       if (checkVictory(&save)) {
         playerVictory(&save);
+        printBoard(&save.board);
         hasGame = 0;
       }
       continue;
@@ -66,6 +72,10 @@ void repl() {
 
       int row, col;
       scanf("%d%d", &row, &col);
+      if (!validatePosition(&save, row, col)) {
+        printf("A posição %d %d é inválida\n", row, col);
+        continue;
+      }
       markRemPos(&save.board, row, col);
       printBoard(&save.board);
       if (checkVictory(&save)) {
@@ -140,6 +150,11 @@ void playerVictory(Game *game) {
   printf("Parabens! %s você gastou %d segundos para completar o jogo.\n",
          game->player, duration);
   tryInsertPlayerRank(game->player, duration);
+}
+
+int validatePosition(Game *game, int row, int col) {
+  return !(row > game->board.size || row < 1 || col > game->board.size ||
+           col < 1);
 }
 
 void helpCommand() {

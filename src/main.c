@@ -53,7 +53,21 @@ void repl() {
     }
 
     if (strcmp(command, "remover") == 0) {
-      // TODO:
+      if (hasGame != 1) {
+        printf("Não existe um jogo ativo. Use o comando ajuda\n");
+        continue;
+      }
+
+      int row, col;
+      scanf("%d%d", &row, &col);
+      markRemPos(&save.board, row, col);
+      printBoard(&save.board);
+      if (checkVictory(&save)) {
+        printf("Parabens! %s você gastou %ld segundos para completar o jogo.",
+               save.player, time(NULL) - save.startTime);
+        hasGame = 0;
+        // TODO: Ranking
+      }
       continue;
     }
 

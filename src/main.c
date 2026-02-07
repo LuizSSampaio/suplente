@@ -198,9 +198,13 @@ void tipCommand(Game *game) {
   const int boardArea = game->board.size * game->board.size;
   const int offset = rand() % boardArea;
   for (int i = offset; i < boardArea + offset; i++) {
-    if (game->board.resp[i - offset] == 1 &&
-        game->board.mask[i - offset] != 1) {
-      game->board.mask[i - offset] = 1;
+    int index = i;
+    if (index >= boardArea) {
+      index -= boardArea;
+    }
+
+    if (game->board.resp[index] == 1 && game->board.mask[index] != 1) {
+      game->board.mask[index] = 1;
       return;
     }
   }

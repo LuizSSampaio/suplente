@@ -40,7 +40,6 @@ void repl() {
     if (scanf("%s", command) == -1 || strcmp(command, "sair") == 0)
       break;
 
-    // TODO: Victory Check
     if (strcmp(command, "adicionar") == 0) {
       if (hasGame != 1) {
         printf("Não existe um jogo ativo. Use o comando ajuda\n");
@@ -51,6 +50,13 @@ void repl() {
       scanf("%d%d", &row, &col);
       markAddPos(&save.board, row, col);
       printBoard(&save.board);
+      if (checkVictory(&save)) {
+        const int duration = time(NULL) - save.startTime;
+        printf("Parabens! %s você gastou %d segundos para completar o jogo.\n",
+               save.player, duration);
+        tryInsertPlayerRank(save.player, duration);
+        hasGame = 0;
+      }
       continue;
     }
 

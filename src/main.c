@@ -98,6 +98,7 @@ void repl() {
         continue;
       }
       tipCommand(&save);
+      printBoard(&save.board);
       continue;
     }
 
